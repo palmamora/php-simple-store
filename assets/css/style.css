@@ -14,7 +14,7 @@ a{
 }
 
 .container {
-    width: 95%;
+    width: 100%;
     max-width: 1000;
     margin: 10px auto;
     display: grid;
@@ -62,15 +62,17 @@ a{
     justify-content: center;
     
 }
-.aside form{
+.form{
     display: flex;
     flex-flow: column nowrap;
     justify-content: center;
+    color: black;
 }
-.aside form > *{
+.form > *{
     margin: 5px;
+    width: 100%;
 }
-.aside form > label{
+.form > label{
     font-size: larger;
     font-weight: normal;
     text-align: center;
@@ -78,7 +80,7 @@ a{
 
 .main{
     background: #f6f6f6;
-    color: whitesmoke;
+    color: black;
     grid-column: 3/13;
     grid-row: 3/4;
     flex-flow: row wrap;

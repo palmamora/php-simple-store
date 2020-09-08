@@ -1,7 +1,7 @@
 #crear base de datos
 CREATE DATABASE php_simple_store;
 #usar base de datos
-USE php-php_simple_store;
+USE php_simple_store;
 
 #crear tabla users
 CREATE TABLE users(

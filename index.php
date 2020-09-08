@@ -1,22 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
+<?php 
+require_once 'autoload.php';
+require_once 'config/parameters.php';
+require_once 'config/Connection.php';
+require_once 'models/User.php';
+require_once 'views/layout/header.php';
+require_once 'views/layout/sidebar.php';
+require_once 'views/layout/main.php';
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="assets/css/style.css">
-  <title>php-simple-store</title>
-</head>
 
-<body>
+function showError()
+{
+    $error = new ErrorController();
+    $error->index();
+}
 
-  <div class="container">
-    <?php require_once 'header.php'; ?>
-    <?php require_once 'aside.php'; ?>
-    <?php require_once 'main.php'; ?>
-    <?php require_once 'footer.php'; ?>
-  </div>
+if (isset($_GET['controller'])) {
+    $nameController = $_GET['controller'] . 'Controller';
+} elseif (!isset($_GET['controller']) && !isset($_GET['action'])) {
+    $nameController = default_controller;
+} else {
+    showError();
+}
 
-</body>
+if (class_exists($nameController)) {
+    $controller = new $nameController();
 
-</html>
+    if (isset($_GET['action']) && method_exists($controller, $_GET['action'])) {
+        $action = $_GET['action'];
+        $controller->$action();
+    } elseif (!isset($_GET['controller']) && !isset($_GET['action'])) {
+        $action = default_action;
+        $controller->$action();
+    } else {
+        showError();
+    }
+} else {
+    showError();
+}
+
+require_once 'views/layout/footer.php';
