@@ -30,12 +30,13 @@ class User
 
 	public function save()
 	{
-		$query = "INSERT INTO users VALUES({$this->getId()},'{$this->getName()}','{$this->getLastName()}','{$this->getEmail()}','{$this->getPassword()}','{$this->getRole()}','{$this->getImage()}');";
+		$password_hash = password_hash($this->link->real_escape_string($this->password), PASSWORD_BCRYPT, ['cost' => 4]);
+		$query = "INSERT INTO users VALUES({$this->getId()},'{$this->getName()}','{$this->getLastName()}','{$this->getEmail()}','{$password_hash}','{$this->getRole()}','{$this->getImage()}');";
 
 		$save = $this->link->query($query);
 		if ($save) {
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 	}
@@ -79,7 +80,7 @@ class User
 	}
 	public function setPassword($password)
 	{
-		$this->password = password_hash($this->link->real_escape_string($password), PASSWORD_BCRYPT, ['cost' => 4]);
+		$this->password = $password;
 	}
 	public function getRole()
 	{
@@ -96,5 +97,30 @@ class User
 	public function setImage($image)
 	{
 		$this->image = $image;
+	}
+	public function getLink()
+	{
+		return $this->link;
+	}
+	public function setLink($link)
+	{
+		$this->link = $link;
+	}
+
+	public function login()
+	{
+		$email = $this->getEmail();
+		$password = $this->getPassword();
+		$query = "SELECT * from users where email='$email'";
+		$result = $this->link->query($query);
+
+		if ($result && $result->num_rows == 1) {
+			$user = $result->fetch_object();
+			if (password_verify($password, $user->password)) {
+				return $user;
+			}
+		} else {
+			return false;
+		}
 	}
 }
